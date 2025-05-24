@@ -6,7 +6,7 @@
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:08:52 by dbriant           #+#    #+#             */
-/*   Updated: 2025/05/24 12:06:40 by dbriant          ###   ########.fr       */
+/*   Updated: 2025/05/24 12:30:47 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,20 @@ int	main(int arg, char *argv[])
 {
 	int	**stack;
 	int	*stack_a;
-	int	*stack_b;
+	//int	*stack_b;
 	size_t	arrlen;
 
 	arrlen = 0;
-	stack = ft_checkarguments(arg, &(++argv), &arrlen);
+	argv++;
+	stack = ft_checkarguments(arg, &argv, &arrlen);
 	stack_a = stack[0];
-	stack_b = stack[1];
+	//stack_b = stack[1];
+	size_t i = 0;
+	while (i < arrlen)
+	{
+		printf("Index: %ld, Val: %d\n", i, stack_a[i]);
+		i++;
+	}
+
 	return (0);
 }
