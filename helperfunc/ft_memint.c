@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_memint.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 15:15:55 by dbriant           #+#    #+#             */
-/*   Updated: 2025/05/20 15:23:31 by dbriant          ###   ########.fr       */
+/*   Created: 2025/05/26 05:46:22 by dbriant           #+#    #+#             */
+/*   Updated: 2025/05/26 07:07:09 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
-# include <stdio.h>
-# include <stdlib.h>
-# include <stddef.h>
-# include "ft_printf/ft_printf.h"
+#include "../push_swap.h"
 
-size_t	ft_memint(const void *s, int c, size_t n);
+size_t	ft_memint(const void *s, int c, size_t n)
+{
+	int		target;
+	size_t	i;
 
-#endif
+	i = 0;
+	target = c;
+	while (n)
+	{
+		if (*(int *)s == target)
+			i++;
+		n--;
+		s = (int *)s + 1;
+	}
+	return (i);
+}

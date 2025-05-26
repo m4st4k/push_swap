@@ -6,7 +6,7 @@
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:08:52 by dbriant           #+#    #+#             */
-/*   Updated: 2025/05/26 05:23:08 by dbriant          ###   ########.fr       */
+/*   Updated: 2025/05/26 07:09:37 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,14 @@ static	int	*stack_a(char **element, int *stack, size_t newlen, size_t oldlen)
 	while (*element != NULL)
 		free(*(element++));
 	free(stack - oldlen);
+	while (i)
+	{
+		if (ft_memint(new, new[--i], newlen) > 1)
+		{
+			free(new);
+			exit((printf("Error\n"), 0));
+		}
+	}
 	return (new);
 }
 
@@ -100,9 +108,10 @@ static	int	*ft_checkarguments(int arg, char *argv[], size_t *arrlen)
 			exit((printf("Error\n"), 0));
 		argv++;
 	}
+	arrlenold = *arrlen;
 	return (stack);
 }
-
+/*
 int	main(int arg, char *argv[])
 {
 	int	*stack_a;
@@ -119,3 +128,4 @@ int	main(int arg, char *argv[])
 
 	return (0);
 }
+*/
