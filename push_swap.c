@@ -6,7 +6,7 @@
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:08:52 by dbriant           #+#    #+#             */
-/*   Updated: 2025/05/26 04:46:04 by dbriant          ###   ########.fr       */
+/*   Updated: 2025/05/26 05:23:08 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static	char	*ft_isvalidstring(char *str)
 
 	i = 0;
 	strlen = ft_strlen(str);
+	val = ft_atoi(str);
 	while (i < strlen)
 	{
 		if (str[i] == ' ')
@@ -52,9 +53,8 @@ static	char	*ft_isvalidstring(char *str)
 			i++;
 		else
 			return (NULL);
-                val = ft_atoi(str);
-                if (val > 4294967295 || val < -2147483648)
-                        return (NULL);
+		if (val > 4294967295 || val < -2147483648)
+			return (NULL);
 	}
 	return (str);
 }
@@ -106,17 +106,14 @@ static	int	*ft_checkarguments(int arg, char *argv[], size_t *arrlen)
 int	main(int arg, char *argv[])
 {
 	int	*stack_a;
-	//int	*stack_b;
 	size_t	arrlen;
 
 	arrlen = 0;
-	argv++;
-	stack_a = ft_checkarguments(arg, argv, &arrlen);
-	//stack_b = stack[1];
+	stack_a = ft_checkarguments(arg, argv + 1, &arrlen);
 	size_t i = 0;
 	while (i < arrlen)
 	{
-		printf("Index: %ld, Val: %d, VVal: %ld\n", i, stack_a[i], (size_t)stack_a[i]);
+		printf("Index: %ld, Val: %d\n", i, stack_a[i]);
 		i++;
 	}
 
