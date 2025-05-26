@@ -41,11 +41,11 @@ static	char	*ft_ignoreprint(const char *neg)
 	return ((char *)neg);
 }
 
-int	ft_atoi(const char *nptr)
+ssize_t	ft_atoi(const char *nptr)
 {
 	size_t	i;
+	ssize_t	num;
 	int		isneg;
-	int		num;
 
 	num = 0;
 	i = 0;

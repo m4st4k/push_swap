@@ -6,7 +6,7 @@
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:08:52 by dbriant           #+#    #+#             */
-/*   Updated: 2025/05/24 12:30:47 by dbriant          ###   ########.fr       */
+/*   Updated: 2025/05/26 04:46:04 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,40 +16,45 @@ static	int	*stack_a(char **element, int *stack, size_t newlen, size_t oldlen)
 {
 	int		*new;
 	size_t	i;
+	size_t	b;
 
 	i = 0;
+	b = 0;
 	new = malloc((sizeof(int) * newlen));
-	if (new == NULL)
+	if (new == NULL || element == NULL)
 		return (NULL);
-	while ((stack != NULL) && (i < oldlen))
+	while (i < oldlen)
 		new[i++] = *(stack++);
-	free(stack - i);
-	while (element != NULL && *element != NULL)
-		new[i++] = ft_atoi(*(element++));
+	while (element[b] != NULL)
+		new[i++] = ft_atoi(element[b++]);
+	while (*element != NULL)
+		free(*(element++));
+	free(stack - oldlen);
 	return (new);
 }
 
-static	char	*ft_isvalidstring(char *str, size_t strlen)
+static	char	*ft_isvalidstring(char *str)
 {
 	size_t	i;
-	size_t	maxlen;
+	size_t	strlen;
+	ssize_t	val;
 
 	i = 0;
-	maxlen = strlen;
-	if ((str == NULL) || (*str == '\0'))
-		return (NULL);
-	while (strlen && i < maxlen)
+	strlen = ft_strlen(str);
+	while (i < strlen)
 	{
-		if (!ft_isdigit(str[i + 1]) && (str[i] == '-' || (str[i] == '+')))
-			return (NULL);
-		if ((str[i] == ' ') && !ft_isdigit(str[i + 1]))
-			return (NULL);
-		if (ft_isdigit(str[i + 1]) && (str[i] == '-' || (str[i] == '+')))
+		if (str[i] == ' ')
 			i++;
-		else if (!ft_isdigit(str[i]))
+		if ((str[i] == '-') || (str[i] == '+'))
+			i++;
+		if (ft_isdigit(str[i]) && (ft_isdigit(str[i + 1])
+				|| (str[i + 1] == ' ') || (str[i + 1] == '\0')))
+			i++;
+		else
 			return (NULL);
-		i++;
-		strlen--;
+                val = ft_atoi(str);
+                if (val > 4294967295 || val < -2147483648)
+                        return (NULL);
 	}
 	return (str);
 }
@@ -61,14 +66,11 @@ static	char	**ft_checkelement(char *element, size_t *arrlen)
 
 	b = 0;
 	check = ft_split(element, ' ');
-	if (*check == NULL || check == NULL)
-	{
-		free(check);
+	if (check == NULL)
 		return (NULL);
-	}
 	while (check[b] != NULL)
 	{
-		if (ft_isvalidstring(check[b], ft_strlen(check[b])) == NULL)
+		if (ft_isvalidstring(check[b]) == NULL)
 		{
 			b = 0;
 			while (check[b] != NULL)
@@ -82,46 +84,39 @@ static	char	**ft_checkelement(char *element, size_t *arrlen)
 	return (check);
 }
 
-static	int	**ft_checkarguments(int arg, char ***argv, size_t *arrlen)
+static	int	*ft_checkarguments(int arg, char *argv[], size_t *arrlen)
 {
 	size_t	arrlenold;
-	char	**validelement;
-	int		**stack_ab;
+	char	**validstring;
 	int		*stack;
 
 	stack = NULL;
 	while (--arg)
 	{
 		arrlenold = *arrlen;
-		validelement = ft_checkelement(**argv, arrlen);
-		if (validelement == NULL)
+		validstring = ft_checkelement(*argv, arrlen);
+		stack = stack_a(validstring, stack, *arrlen, arrlenold);
+		if (stack == NULL || validstring == NULL)
 			exit((printf("Error\n"), 0));
-		stack = stack_a(validelement, stack, *arrlen, arrlenold);
-		(*argv)++;
+		argv++;
 	}
-	stack_ab = (int **)malloc(sizeof(int *) * 3);
-	stack_ab[0] = stack;
-	stack_ab[1] = malloc(sizeof(int) * (*arrlen));
-	stack_ab[2] = NULL;
-	return (stack_ab);
+	return (stack);
 }
 
 int	main(int arg, char *argv[])
 {
-	int	**stack;
 	int	*stack_a;
 	//int	*stack_b;
 	size_t	arrlen;
 
 	arrlen = 0;
 	argv++;
-	stack = ft_checkarguments(arg, &argv, &arrlen);
-	stack_a = stack[0];
+	stack_a = ft_checkarguments(arg, argv, &arrlen);
 	//stack_b = stack[1];
 	size_t i = 0;
 	while (i < arrlen)
 	{
-		printf("Index: %ld, Val: %d\n", i, stack_a[i]);
+		printf("Index: %ld, Val: %d, VVal: %ld\n", i, stack_a[i], (size_t)stack_a[i]);
 		i++;
 	}
 
