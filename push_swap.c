@@ -6,37 +6,30 @@
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:08:52 by dbriant           #+#    #+#             */
-/*   Updated: 2025/05/26 07:09:37 by dbriant          ###   ########.fr       */
+/*   Updated: 2025/05/27 18:46:22 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static	int	*stack_a(char **element, int *stack, size_t newlen, size_t oldlen)
+static	int	*create_a(int arg, char *argv[], int newlen)
 {
 	int		*new;
+	char	*cache;
 	size_t	i;
-	size_t	b;
 
 	i = 0;
-	b = 0;
 	new = malloc((sizeof(int) * newlen));
-	if (new == NULL || element == NULL)
-		return (NULL);
-	while (i < oldlen)
-		new[i++] = *(stack++);
-	while (element[b] != NULL)
-		new[i++] = ft_atoi(element[b++]);
-	while (*element != NULL)
-		free(*(element++));
-	free(stack - oldlen);
-	while (i)
+	while (--arg)
 	{
-		if (ft_memint(new, new[--i], newlen) > 1)
+		cache = get_next_token(*argv, NULL);
+		while (cache != NULL)
 		{
-			free(new);
-			exit((printf("Error\n"), 0));
+			new[i++] = ft_atoi(cache);
+			free(cache);
+			cache = get_next_token(NULL, NULL);
 		}
+		argv++;
 	}
 	return (new);
 }
@@ -52,12 +45,10 @@ static	char	*ft_isvalidstring(char *str)
 	val = ft_atoi(str);
 	while (i < strlen)
 	{
-		if (str[i] == ' ')
-			i++;
 		if ((str[i] == '-') || (str[i] == '+'))
 			i++;
-		if (ft_isdigit(str[i]) && (ft_isdigit(str[i + 1])
-				|| (str[i + 1] == ' ') || (str[i + 1] == '\0')))
+		if (ft_isdigit(str[i]) &&
+			(ft_isdigit(str[i + 1]) || (str[i + 1] == '\0')))
 			i++;
 		else
 			return (NULL);
@@ -67,65 +58,43 @@ static	char	*ft_isvalidstring(char *str)
 	return (str);
 }
 
-static	char	**ft_checkelement(char *element, size_t *arrlen)
+static	int	get_arrlen(int arg, char *argv[])
 {
-	size_t	b;
-	char	**check;
-
-	b = 0;
-	check = ft_split(element, ' ');
-	if (check == NULL)
-		return (NULL);
-	while (check[b] != NULL)
-	{
-		if (ft_isvalidstring(check[b]) == NULL)
-		{
-			b = 0;
-			while (check[b] != NULL)
-				free(check[b++]);
-			free(check);
-			return (NULL);
-		}
-		b++;
-		(*arrlen)++;
-	}
-	return (check);
-}
-
-static	int	*ft_checkarguments(int arg, char *argv[], size_t *arrlen)
-{
-	size_t	arrlenold;
-	char	**validstring;
-	int		*stack;
-
-	stack = NULL;
-	while (--arg)
-	{
-		arrlenold = *arrlen;
-		validstring = ft_checkelement(*argv, arrlen);
-		stack = stack_a(validstring, stack, *arrlen, arrlenold);
-		if (stack == NULL || validstring == NULL)
-			exit((printf("Error\n"), 0));
-		argv++;
-	}
-	arrlenold = *arrlen;
-	return (stack);
-}
-/*
-int	main(int arg, char *argv[])
-{
-	int	*stack_a;
-	size_t	arrlen;
+	int	arrlen;
+	char	*str;
 
 	arrlen = 0;
-	stack_a = ft_checkarguments(arg, argv + 1, &arrlen);
-	size_t i = 0;
-	while (i < arrlen)
+	while (--arg)
 	{
-		printf("Index: %ld, Val: %d\n", i, stack_a[i]);
-		i++;
+		str = get_next_token(*argv, &arrlen);
+		while (str != NULL)
+		{
+			if (ft_isvalidstring(str) == NULL)
+			{
+				free(str);
+				exit((printf("Error\n"), 0));
+			}
+			free(str);
+			str = get_next_token(NULL, &arrlen);
+		}
+		free(str);
+		argv++;
 	}
+	return (arrlen);
+}
 
+int	main(int arg, char *argv[])
+{
+	int	arrlen;
+	int	*stack_a;
+
+	arrlen = get_arrlen(arg, argv + 1);
+	stack_a = create_a(arg, argv + 1, arrlen);
+	printf("Size: %d\n", arrlen);
+	while (arrlen)
+	{
+		printf("Stack: %d\n", *(stack_a++));
+		arrlen--;
+	}
 	return (0);
 }
-*/

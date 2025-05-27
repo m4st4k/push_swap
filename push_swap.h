@@ -17,6 +17,6 @@
 # include <stddef.h>
 # include "ft_printf/ft_printf.h"
 
-size_t	ft_memint(const void *s, int c, size_t n);
+char	*get_next_token(char *str, int *arrlen);
 
 #endif

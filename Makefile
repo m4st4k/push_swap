@@ -15,7 +15,7 @@ CFLAGS    = -Wall -Wextra -Werror
 DELALL    = *.a *.o
 
 NAME      = push_swap
-SRCS      = push_swap.c helperfunc/ft_memint.c
+SRCS      = push_swap.c helperfunc/ft_get_next_token.c 
 OBJS      = $(SRCS:.c=.o)
 
 FTPRINTF       = ft_printf/libftprintf.a
