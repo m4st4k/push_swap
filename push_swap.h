@@ -18,5 +18,6 @@
 # include "ft_printf/ft_printf.h"
 
 char	*get_next_token(char *str, int *arrlen);
+int		int_overflow(char *str, size_t isneg);
 
 #endif

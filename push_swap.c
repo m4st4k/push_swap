@@ -6,7 +6,7 @@
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:08:52 by dbriant           #+#    #+#             */
-/*   Updated: 2025/05/27 18:46:22 by dbriant          ###   ########.fr       */
+/*   Updated: 2025/06/02 21:08:10 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static	int	*create_a(int arg, char *argv[], int newlen)
 			free(cache);
 			cache = get_next_token(NULL, NULL);
 		}
+		free(cache);
 		argv++;
 	}
 	return (new);
@@ -38,21 +39,22 @@ static	char	*ft_isvalidstring(char *str)
 {
 	size_t	i;
 	size_t	strlen;
-	ssize_t	val;
+	char	*origstr;
 
 	i = 0;
+	origstr = str;
+	if ((*str == '-') || (*str == '+'))
+		str++;
+	if (!ft_isdigit(str[i]))
+		return (NULL);
 	strlen = ft_strlen(str);
-	val = ft_atoi(str);
-	while (i < strlen)
+	while (ft_isdigit(str[i]))
+		i++;
+	if (i < strlen || i > 10)
+		return (NULL);
+	if (*str != '0')
 	{
-		if ((str[i] == '-') || (str[i] == '+'))
-			i++;
-		if (ft_isdigit(str[i]) &&
-			(ft_isdigit(str[i + 1]) || (str[i + 1] == '\0')))
-			i++;
-		else
-			return (NULL);
-		if (val > 4294967295 || val < -2147483648)
+		if (ft_atoi(origstr) == 0)
 			return (NULL);
 	}
 	return (str);
@@ -83,18 +85,44 @@ static	int	get_arrlen(int arg, char *argv[])
 	return (arrlen);
 }
 
+static	void	*ft_memint(const int *s, int c, size_t n)
+{
+	size_t	i;
+	size_t	b;
+
+	b = 0;
+	i = 0;
+	while (n--)
+	{
+		if (s[i++] == c)
+			b++;
+		if (b > 1)
+			return (NULL);
+	}
+	return ((int *)s);
+}
+
 int	main(int arg, char *argv[])
 {
 	int	arrlen;
+	int	i;
+	int	b;
 	int	*stack_a;
+	//int	*stack_b;
 
+	i = 0;
 	arrlen = get_arrlen(arg, argv + 1);
 	stack_a = create_a(arg, argv + 1, arrlen);
-	printf("Size: %d\n", arrlen);
-	while (arrlen)
+	b = arrlen;
+	//stack_b	= malloc(sizeof(int) * arrlen);
+	while (b--)
 	{
-		printf("Stack: %d\n", *(stack_a++));
-		arrlen--;
+		if (ft_memint(stack_a, stack_a[b], arrlen) == NULL)
+			exit((printf("Error\n"), 0));
 	}
+	printf("Size: %d\n", arrlen);
+	while (i < arrlen)
+		printf("Stack: %d\n", stack_a[i++]);
+	free(stack_a);
 	return (0);
 }
