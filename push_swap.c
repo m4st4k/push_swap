@@ -39,87 +39,57 @@ static	char	*ft_isvalidstring(char *str)
 {
 	size_t	i;
 	size_t	strlen;
-	char	*origstr;
+	char	*oldstr;
 
 	i = 0;
-	origstr = str;
-	if ((*str == '-') || (*str == '+'))
+	oldstr = str;
+	if (*str == '-' || *str == '+')
 		str++;
-	if (!ft_isdigit(str[i]))
-		return (NULL);
 	strlen = ft_strlen(str);
 	while (ft_isdigit(str[i]))
 		i++;
-	if (i < strlen || i > 10)
+	if (i < strlen)
 		return (NULL);
-	if (*str != '0')
-	{
-		if (ft_atoi(origstr) == 0)
-			return (NULL);
-	}
+	if (ft_atoi(oldstr) == 0)
+		return (NULL);
 	return (str);
 }
 
 static	int	get_arrlen(int arg, char *argv[])
 {
-	int	arrlen;
-	char	*str;
+	int		arrlen;
+	char	*token_orig;
+	char	*token_new;
 
 	arrlen = 0;
 	while (--arg)
 	{
-		str = get_next_token(*argv, &arrlen);
-		while (str != NULL)
+		token_orig = ft_strdup(*argv);
+		token_new = get_next_token(token_orig, &arrlen);
+		while (token_new != NULL)
 		{
-			if (ft_isvalidstring(str) == NULL)
-			{
-				free(str);
-				exit((printf("Error\n"), 0));
-			}
-			free(str);
-			str = get_next_token(NULL, &arrlen);
+			if (ft_isvalidstring(token_new) == NULL)
+				print_error(token_orig);
+			arrlen++;
+			token_new = get_next_token(NULL, &arrlen);
 		}
-		free(str);
+		free(token_orig);
 		argv++;
 	}
 	return (arrlen);
-}
-
-static	void	*ft_memint(const int *s, int c, size_t n)
-{
-	size_t	i;
-	size_t	b;
-
-	b = 0;
-	i = 0;
-	while (n--)
-	{
-		if (s[i++] == c)
-			b++;
-		if (b > 1)
-			return (NULL);
-	}
-	return ((int *)s);
 }
 
 int	main(int arg, char *argv[])
 {
 	int	arrlen;
 	int	i;
-	int	b;
 	int	*stack_a;
 	//int	*stack_b;
-
 	i = 0;
 	arrlen = get_arrlen(arg, argv + 1);
 	stack_a = create_a(arg, argv + 1, arrlen);
-	b = arrlen;
+	check_dup_in_arr(stack_a, arrlen);
 	//stack_b	= malloc(sizeof(int) * arrlen);
-	while (b--)
-	{
-		if (ft_memint(stack_a, stack_a[b], arrlen) == NULL)
-			exit((printf("Error\n"), 0));
-	}
 	printf("Size: %d\n", arrlen);
 	while (i < arrlen)
 		printf("Stack: %d\n", stack_a[i++]);

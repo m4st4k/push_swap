@@ -12,113 +12,71 @@
 #include "libft.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
-static	int	ft_isnegative(const char *neg)
+static	const	char	*parse_sign(const char *str, int *isneg)
 {
-	if (neg == NULL || *neg == '\0')
+	if (*str == '+')
+		str++;
+	else if (*str == '-')
+	{
+		*isneg = 1;
+		str++;
+	}
+	return (str);
+}
+
+static	const	char	*skip_white_space_chars(const char *str)
+{
+	while ((*str >= '\t' && *str <= '\r') || *str == ' ')
+		str++;
+	return (str);
+}
+
+static	int	safe_add(int a, int b, int *overflow)
+{
+	if ((a > 0 && b > INT_MAX - a) || (a < 0 && b < INT_MIN - a))
+	{
+		*overflow = 1;
 		return (0);
-	if (*neg == '-')
-		return (1);
-	return (0);
+	}
+	return (a + b);
 }
 
-static	char	*ft_ignoreprint(const char *neg)
+static	int	safe_mul(int a, int b, int *overflow)
 {
-	char	i;
-
-	i = '\t';
-	while (i <= '\r')
+	if ((a > INT_MAX / b) || (a < INT_MIN / b))
 	{
-		while (*neg == i || *neg == ' ')
-		{
-			neg++;
-			i = '\t';
-		}
-		i++;
+		*overflow = 1;
+		return (0);
 	}
-	while ((*neg == '-') || (*neg == '+'))
-	{
-		if (ft_isdigit(*(neg + 1)))
-			break ;
-		neg++;
-	}
-	return ((char *)neg);
+	return (a * b);
 }
 
-static	int	create_int_val(char *negativeint, size_t isneg)
-{
-	int	num;
-	size_t	i;
-
-	i = 0;
-	num = 0;
-	while (negativeint[i] != '\0')
-	{
-		if (i == 9 && isneg && negativeint[i] == '8')
-			num = (((negativeint[i++] - '0') - 1) + (num * 10));
-		else
-			num = ((negativeint[i++] - '0') + (num * 10));
-	}
-	if (isneg && negativeint[i-1] == '8')
-		num = (-num) - 1;
-	else if (isneg)
-		num = -num;
-	return (num);
-}
-
-static	int	int_near_overflow(char *str, size_t isneg)
-{
-	char	*maxint;
-	size_t	b;
-
-	b = 0;
-	if (isneg)
-		maxint = "2147483648";
-	else
-		maxint = "2147483647";
-	while (ft_isdigit(maxint[b]))
-	{
-		if (str[b] > maxint[b])
-			return (0);
-		b++;
-	}
-	str[b] = '\0';
-	return (create_int_val(str, isneg));
-}
-    
 int	ft_atoi(const char *nptr)
 {
-	size_t	i;
-	int		num;
-	int		isneg;
+	int	overflow;
+	int	num;
+	int	digit;
+	int	isneg;
 
+	if (nptr == NULL)
+		return (0);
+	overflow = 0;
 	num = 0;
-	i = 0;
-	nptr = ft_ignoreprint(nptr);
-	isneg = ft_isnegative(nptr);
-	if (*nptr == '\0')
-		return (0);
-	if (*nptr == '-' || *nptr == '+')
+	isneg = 0;
+	nptr = skip_white_space_chars(nptr);
+	nptr = parse_sign(nptr, &isneg);
+	while (ft_isdigit(*nptr) && !overflow)
+	{
+		digit = (*nptr) - '0';
+		if (isneg)
+			digit = -digit;
+		num = safe_mul(num, 10, &overflow);
+		num = safe_add(num, digit, &overflow);
 		nptr++;
-	while (ft_isdigit(nptr[i]))
-		i++;
-	if (i > 10)
-		return (0);
-	if (i == 10)
-		return (int_near_overflow((char * )nptr, isneg));
-	i = 0;
-	while (ft_isdigit(nptr[i]))
-		num = (nptr[i++] - '0') + (num * 10);
-	if (isneg)
-		num = -num;
+	}
+	if (overflow)
+		num = 0;
 	return ((int)num);
 }
-
-/*
-int	main(void)
-{
-	char num[] = "\212 139";
-	printf("Return: %d\n", ft_atoi(num));
-	printf("Return: %d\n", atoi(num));
-}
-*/

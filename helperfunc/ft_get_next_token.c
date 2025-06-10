@@ -6,43 +6,45 @@
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 02:25:06 by dbriant           #+#    #+#             */
-/*   Updated: 2025/05/27 12:05:09 by dbriant          ###   ########.fr       */
+/*   Updated: 2025/06/10 02:04:40 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-static	char	*create_token(char **token, int *arrlen)
+static	char	*start_token(char *str)
 {
-	size_t	i;
-	char    *new;
-
-	i = 0;
-	if (**token == '\0')
+	while ((*str == ' ') && (*str != '\0'))
+		str++;
+	if (*str == '\0')
 		return (NULL);
-	if (arrlen != NULL)
-		*arrlen = (*arrlen) + 1;
-	while ((**token == ' ') && (**token != '\0'))
-	    (*token)++;
-	while (((*token)[i] != ' ') && ((*token)[i] != '\0'))
-		i++;
-	new = malloc((sizeof(char) * i) + 1);
-	i = 0;
-	while ((**token != ' ') && (**token != '\0'))
-		new[i++] = *((*token)++);
-	new[i] = '\0';
-	if (**token == ' ')
-	    *token = (*token) + 1;
-	return (new);
+	return (str);
+}
+
+static	char	*zero_terminate_token(char *token)
+{
+	new = str;
+	while ((*str != ' ') && (*str != '\0'))
+		str++;
+	if (*token == ' ')
+	{
+	    *token = '\0';
+	    token++;
+	}
+	return (token);
 }
 
 char	*get_next_token(char *str, int *arrlen)
 {
-	static	char	*token;
+	static char	*token;
+	char	*new;
 
-	if (str == NULL)
-		return (create_token(&(token), arrlen));
-	else
+	if (str != NULL)
 		token = str;
-    return (create_token(&(token), arrlen));
+	token = start_token(token);
+	if (token == NULL)
+		return (NULL);
+	new = token;
+	token = zero_terminate_token(token);
+	return (new);
 }

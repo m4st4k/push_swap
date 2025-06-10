@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_print_error.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 15:15:55 by dbriant           #+#    #+#             */
-/*   Updated: 2025/05/20 15:23:31 by dbriant          ###   ########.fr       */
+/*   Created: 2025/06/10 00:01:28 by dbriant           #+#    #+#             */
+/*   Updated: 2025/06/10 00:01:33 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
-# include <stdio.h>
-# include <stdlib.h>
-# include <stddef.h>
-# include "ft_printf/ft_printf.h"
+#include "../push_swap.h"
 
-char	*get_next_token(char *str, int *arrlen);
-void	check_dup_in_arr(int arr);
-void	print_error(char *str);
-
-#endif
+void	print_error(char *str)
+{
+	free(str);
+	printf("Error\n");
+	exit(0);
+}

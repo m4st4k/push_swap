@@ -1,24 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_check_dup_in_arr.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 15:15:55 by dbriant           #+#    #+#             */
-/*   Updated: 2025/05/20 15:23:31 by dbriant          ###   ########.fr       */
+/*   Created: 2025/06/09 23:16:16 by dbriant           #+#    #+#             */
+/*   Updated: 2025/06/09 23:42:48 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
-# include <stdio.h>
-# include <stdlib.h>
-# include <stddef.h>
-# include "ft_printf/ft_printf.h"
+#include "../push_swap.h"
 
-char	*get_next_token(char *str, int *arrlen);
-void	check_dup_in_arr(int arr);
-void	print_error(char *str);
+static	int	check_if_element_dup(int *arr, int element, size_t index)
+{
+	size_t	i;
 
-#endif
+	i = 0;
+	while (index--)
+	{
+		if (arr[index] == element)
+			i++;
+		if (i == 2)
+			return (1);
+	}
+	return (0);
+}
+
+void	check_dup_in_arr(int *arr, size_t arrlen)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < arrlen)
+	{
+		if (chech_if_element_dup(arr, arr[i++], arrlen) == 1)
+			print_error(arr);
+	}
+}
