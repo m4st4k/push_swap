@@ -6,45 +6,35 @@
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 02:25:06 by dbriant           #+#    #+#             */
-/*   Updated: 2025/06/10 02:04:40 by dbriant          ###   ########.fr       */
+/*   Updated: 2025/06/14 00:03:52 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-static	char	*start_token(char *str)
+static int	is_white_space(char c)
 {
-	while ((*str == ' ') && (*str != '\0'))
-		str++;
-	if (*str == '\0')
-		return (NULL);
-	return (str);
+	return (c == ' ' || (c >= '\t' && c <= '\r'));
 }
 
-static	char	*zero_terminate_token(char *token)
+char	*get_next_token(char *str)
 {
-	new = str;
-	while ((*str != ' ') && (*str != '\0'))
-		str++;
-	if (*token == ' ')
-	{
-	    *token = '\0';
-	    token++;
-	}
-	return (token);
-}
-
-char	*get_next_token(char *str, int *arrlen)
-{
-	static char	*token;
-	char	*new;
+	static char	*str_current;
+	char		*token;
 
 	if (str != NULL)
-		token = str;
-	token = start_token(token);
-	if (token == NULL)
+		str_current = str;
+	while (*str_current != '\0' && is_white_space(*str_current))
+		str_current++;
+	if (*str_current == '\0')
 		return (NULL);
-	new = token;
-	token = zero_terminate_token(token);
-	return (new);
+	token = str_current;
+	while (*str_current != '\0' && !is_white_space(*str_current))
+		str_current++;
+	if (is_white_space(*str_current))
+	{
+		*str_current = '\0';
+		str_current++;
+	}
+	return (token);
 }
