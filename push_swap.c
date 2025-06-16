@@ -14,67 +14,42 @@
 
 static	int	*create_a(int arg, char *argv[], int newlen)
 {
-	int		*new;
-	char	*cache;
+	int		*array_a;
+	char	*token;
 	size_t	i;
 
 	i = 0;
-	new = malloc((sizeof(int) * newlen));
+	array_a = malloc((sizeof(int) * newlen));
 	while (--arg)
 	{
-		cache = get_next_token(*argv, NULL);
-		while (cache != NULL)
+		token = get_next_token(*argv);
+		while (token != NULL)
 		{
-			new[i++] = ft_atoi(cache);
-			free(cache);
-			cache = get_next_token(NULL, NULL);
+			if (parse_integer(token, &(array_a[i++])) == 0)
+				print_error(array_a);
+			token = get_next_token(NULL);
 		}
-		free(cache);
-		argv++;
+		++argv;
 	}
-	return (new);
-}
-
-static	char	*ft_isvalidstring(char *str)
-{
-	size_t	i;
-	size_t	strlen;
-	char	*oldstr;
-
-	i = 0;
-	oldstr = str;
-	if (*str == '-' || *str == '+')
-		str++;
-	strlen = ft_strlen(str);
-	while (ft_isdigit(str[i]))
-		i++;
-	if (i < strlen)
-		return (NULL);
-	if (ft_atoi(oldstr) == 0)
-		return (NULL);
-	return (str);
+	
+	return (array_a);
 }
 
 static	int	get_arrlen(int arg, char *argv[])
 {
 	int		arrlen;
-	char	*token_orig;
-	char	*token_new;
+	char	*str_copy;
 
 	arrlen = 0;
 	while (--arg)
 	{
-		token_orig = ft_strdup(*argv);
-		token_new = get_next_token(token_orig, &arrlen);
-		while (token_new != NULL)
-		{
-			if (ft_isvalidstring(token_new) == NULL)
-				print_error(token_orig);
-			arrlen++;
-			token_new = get_next_token(NULL, &arrlen);
-		}
-		free(token_orig);
-		argv++;
+		str_copy = str_dup(*argv);
+		get_next_token(str_copy);
+		++arrlen;
+		while (get_next_token(NULL) != NULL)
+			++arrlen;
+		free(str_copy);
+		++argv;
 	}
 	return (arrlen);
 }

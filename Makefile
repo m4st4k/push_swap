@@ -15,30 +15,22 @@ CFLAGS    = -Wall -Wextra -Werror
 DELALL    = *.a *.o
 
 NAME      = push_swap
-SRCS      = push_swap.c helperfunc/ft_get_next_token.c 
+SRCS      = push_swap.c helperfunc/get_next_token.c helperfunc/check_dup_in_arr.c helperfunc/parse_integer.c helperfunc/print_error.c \
+			helperfunc/str_dup.c
 OBJS      = $(SRCS:.c=.o)
-
-FTPRINTF       = ft_printf/libftprintf.a
-FTPRINTF_DIR   = ft_printf
-FTPRINTF_INC   = -I$(FTPRINTF_DIR)
 
 all: $(NAME)
 
-$(FTPRINTF):
-	$(MAKE) -C $(FTPRINTF_DIR)
-
-$(NAME): $(FTPRINTF) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(FTPRINTF) -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(FTPRINTF_INC) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(MAKE) -C $(FTPRINTF_DIR) clean
 	rm -f $(OBJS)
 
 fclean: clean
-	$(MAKE) -C $(FTPRINTF_DIR) fclean
 	rm -f $(NAME)
 
 re: fclean all

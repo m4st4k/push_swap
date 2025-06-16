@@ -15,10 +15,13 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stddef.h>
-# include "ft_printf/ft_printf.h"
+# include <stdbool.h>
+# include <limits.h>
 
-char	*get_next_token(char *str, int *arrlen);
-void	check_dup_in_arr(int arr);
-void	print_error(char *str);
+char	*str_dup(const char *s);
+char	*get_next_token(char *str);
+bool	parse_integer(const char *nptr, int *array_a);
+void	check_dup_in_arr(int *stack_a, size_t arrlen);
+void	print_error(int *str);
 
 #endif

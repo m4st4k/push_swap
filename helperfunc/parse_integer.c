@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   parse_integer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/31 18:01:09 by dbriant           #+#    #+#             */
-/*   Updated: 2025/01/03 09:59:16 by dbriant          ###   ########.fr       */
+/*   Created: 2025/06/16 15:31:40 by dbriant           #+#    #+#             */
+/*   Updated: 2025/06/16 15:32:04 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
+
+#include "../push_swap.h"
 
 static	const	char	*parse_sign(const char *str, int *isneg)
 {
@@ -23,13 +21,6 @@ static	const	char	*parse_sign(const char *str, int *isneg)
 		*isneg = 1;
 		str++;
 	}
-	return (str);
-}
-
-static	const	char	*skip_white_space_chars(const char *str)
-{
-	while ((*str >= '\t' && *str <= '\r') || *str == ' ')
-		str++;
 	return (str);
 }
 
@@ -53,7 +44,14 @@ static	int	safe_mul(int a, int b, int *overflow)
 	return (a * b);
 }
 
-int	ft_atoi(const char *nptr)
+static	int	is_digit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
+
+bool	parse_integer(const char *nptr, int *array_a)
 {
 	int	overflow;
 	int	num;
@@ -65,9 +63,8 @@ int	ft_atoi(const char *nptr)
 	overflow = 0;
 	num = 0;
 	isneg = 0;
-	nptr = skip_white_space_chars(nptr);
 	nptr = parse_sign(nptr, &isneg);
-	while (ft_isdigit(*nptr) && !overflow)
+	while (!overflow && is_digit(*nptr))
 	{
 		digit = (*nptr) - '0';
 		if (isneg)
@@ -76,7 +73,8 @@ int	ft_atoi(const char *nptr)
 		num = safe_add(num, digit, &overflow);
 		nptr++;
 	}
-	if (overflow)
-		num = 0;
-	return ((int)num);
+	if (overflow || *nptr != '\0')
+		return (0);
+	*array_a = num;
+	return (1);
 }

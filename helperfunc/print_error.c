@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   print_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/28 01:59:41 by dbriant           #+#    #+#             */
-/*   Updated: 2024/12/28 03:05:03 by dbriant          ###   ########.fr       */
+/*   Created: 2025/06/16 13:38:33 by dbriant           #+#    #+#             */
+/*   Updated: 2025/06/16 13:38:38 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../push_swap.h"
+#include <unistd.h>
 
-void	*ft_memset(void *s, int c, size_t n)
+void	print_error(int *str)
 {
-	int	i;
-
-	i = 0;
-	while (n)
-	{
-		((char *)s)[i] = c;
-		i++;
-		n--;
-	}
-	return ((char *)s);
+	free(str);
+	write(1, "Error\n", 7);
+	exit(0);
 }

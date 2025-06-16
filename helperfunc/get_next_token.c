@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_next_token.c                                :+:      :+:    :+:   */
+/*   get_next_token.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbriant <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 02:25:06 by dbriant           #+#    #+#             */
-/*   Updated: 2025/06/14 00:03:52 by dbriant          ###   ########.fr       */
+/*   Created: 2025/06/16 13:38:17 by dbriant           #+#    #+#             */
+/*   Updated: 2025/06/16 13:38:20 by dbriant          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ char	*get_next_token(char *str)
 		str_current = str;
 	while (is_white_space(*str_current))
 		++str_current;
-	if (character == '\0')
+	if (*str_current == '\0')
 		return (NULL);
 	token = str_current;
 	while (*str_current != '\0')
 	{
-		if (is_white_space(character))
+		if (is_white_space(*str_current))
 		{
 			*(str_current++) = '\0';
 			break ;
