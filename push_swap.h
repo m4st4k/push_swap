@@ -22,6 +22,6 @@ char	*str_dup(const char *s);
 char	*get_next_token(char *str);
 bool	parse_integer(const char *nptr, int *array_a);
 void	check_dup_in_arr(int *stack_a, size_t arrlen);
-void	print_error(int *str);
+void	handle_error(void *str);
 
 #endif
