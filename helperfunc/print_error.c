@@ -13,9 +13,9 @@
 #include "../push_swap.h"
 #include <unistd.h>
 
-void	print_error(int *str)
+void	handle_error(void *array)
 {
-	free(str);
+	free(array);
 	write(1, "Error\n", 7);
 	exit(0);
 }
