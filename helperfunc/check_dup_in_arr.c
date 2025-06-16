@@ -35,6 +35,6 @@ void	check_dup_in_arr(int *arr, size_t arrlen)
 	{
 		count = check_if_element_dup(arr, arr[i++], arrlen);
 		if (count > 1)
-			print_error(arr);
+			handle_error(arr);
 	}
 }
