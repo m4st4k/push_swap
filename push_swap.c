@@ -26,13 +26,20 @@ static	int	*create_a(int arg, char *argv[], int newlen)
 		while (token != NULL)
 		{
 			if (parse_integer(token, &(array_a[i++])) == 0)
-				print_error(array_a);
+				handle_error(array_a);
 			token = get_next_token(NULL);
 		}
 		++argv;
 	}
-	
 	return (array_a);
+}
+
+static	bool	count_tokens(char *token, int *arrlen)
+{
+	if (token == NULL)
+		return (0);
+	++(*arrlen);
+	return (1);
 }
 
 static	int	get_arrlen(int arg, char *argv[])
@@ -44,10 +51,10 @@ static	int	get_arrlen(int arg, char *argv[])
 	while (--arg)
 	{
 		str_copy = str_dup(*argv);
-		get_next_token(str_copy);
-		++arrlen;
-		while (get_next_token(NULL) != NULL)
-			++arrlen;
+		if (count_tokens(get_next_token(str_copy), &arrlen) == 0)
+			handle_error(str_copy);
+		while (count_tokens(get_next_token(NULL), &arrlen) != 0)
+			;
 		free(str_copy);
 		++argv;
 	}
@@ -65,7 +72,6 @@ int	main(int arg, char *argv[])
 	stack_a = create_a(arg, argv + 1, arrlen);
 	check_dup_in_arr(stack_a, arrlen);
 	//stack_b	= malloc(sizeof(int) * arrlen);
-	printf("Size: %d\n", arrlen);
 	while (i < arrlen)
 		printf("Stack: %d\n", stack_a[i++]);
 	free(stack_a);
